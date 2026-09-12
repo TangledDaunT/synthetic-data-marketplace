@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthetic Data Marketplace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Synthetic Data Marketplace</h1>
+            <p>Match with niche, high-value data providers. Get synthetic data on demand.</p>
+        </header>
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <section class="datasets">
+                <h2>Available Datasets</h2>
+                <div class="dataset-grid">
+                    {% for dataset in datasets %}
+                    <div class="dataset-card">
+                        <h3>{{ dataset.name }}</h3>
+                        <p class="category">{{ dataset.category }}</p>
+                        <p class="description">{{ dataset.description }}</p>
+                        <div class="details">
+                            <span class="size">{{ dataset.size_mb }} MB</span>
+                            <span class="privacy">{{ dataset.privacy_level }}</span>
+                            <span class="price">${{ dataset.price_per_query }} per query</span>
+                        </div>
+                        <form action="{{ url_for('request_data') }}" method="post" class="request-form">
+                            <input type="hidden" name="dataset_id" value="{{ dataset.id }}">
+                            <input type="text" name="use_case" placeholder="Describe your use case" required>
+                            <button type="submit">Request Synthetic Data</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2026 Synthetic Data Marketplace. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
